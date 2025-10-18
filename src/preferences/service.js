@@ -12,8 +12,8 @@ import Gtk from 'gi://Gtk';
 import system from 'system';
 
 import Config from '../config.js';
-import {Panel, rowSeparators} from './device.js';
-import {Service} from '../utils/remote.js';
+import { Panel, rowSeparators } from './device.js';
+import { Service } from '../utils/remote.js';
 
 
 /*
@@ -51,7 +51,7 @@ async function generateSupportLog(time) {
         // FIXME: BSD???
         const proc = new Gio.Subprocess({
             flags: (Gio.SubprocessFlags.STDOUT_PIPE |
-                    Gio.SubprocessFlags.STDERR_MERGE),
+                Gio.SubprocessFlags.STDERR_MERGE),
             argv: ['journalctl', '--no-host', '--since', time],
         });
         proc.init(null);
@@ -225,6 +225,9 @@ export const Window = GObject.registerClass({
         // Setting: Keep Alive When Locked
         this.add_action(this.settings.create_action('keep-alive-when-locked'));
 
+        // Setting: Create Native Messaging Host Files
+        this.add_action(this.settings.create_action('create-native-messaging-hosts'));
+
         // Broadcast automatically every 5 seconds if there are no devices yet
         this._refreshSource = GLib.timeout_add_seconds(
             GLib.PRIORITY_DEFAULT,
@@ -286,22 +289,22 @@ export const Window = GObject.registerClass({
         this.add_action(displayMode);
 
         // About Dialog
-        const aboutDialog = new Gio.SimpleAction({name: 'about'});
+        const aboutDialog = new Gio.SimpleAction({ name: 'about' });
         aboutDialog.connect('activate', this._aboutDialog.bind(this));
         this.add_action(aboutDialog);
 
         // "Connect to..." Dialog
-        const connectDialog = new Gio.SimpleAction({name: 'connect'});
+        const connectDialog = new Gio.SimpleAction({ name: 'connect' });
         connectDialog.connect('activate', this._connectDialog.bind(this));
         this.add_action(connectDialog);
 
         // "Generate Support Log" GAction
-        const generateSupportLog = new Gio.SimpleAction({name: 'support-log'});
+        const generateSupportLog = new Gio.SimpleAction({ name: 'support-log' });
         generateSupportLog.connect('activate', this._generateSupportLog.bind(this));
         this.add_action(generateSupportLog);
 
         // "Help" GAction
-        const help = new Gio.SimpleAction({name: 'help'});
+        const help = new Gio.SimpleAction({ name: 'help' });
         help.connect('activate', this._help);
         this.add_action(help);
     }
@@ -443,7 +446,7 @@ export const Window = GObject.registerClass({
             text: _('Invalid Device Name'),
             // TRANSLATOR: %s is a list of forbidden characters
             secondary_text: _('Device name must not contain any of %s ' +
-                              'and have a length of 1-32 characters')
+                'and have a length of 1-32 characters')
                 .format('<b><tt>^"\',;:.!?()[]&lt;&gt;</tt></b>'),
             secondary_use_markup: true,
             buttons: Gtk.ButtonsType.OK,
@@ -572,7 +575,7 @@ export const Window = GObject.registerClass({
         row.add(grid);
 
         const icon = new Gtk.Image({
-            gicon: new Gio.ThemedIcon({name: device.icon_name}),
+            gicon: new Gio.ThemedIcon({ name: device.icon_name }),
             icon_size: Gtk.IconSize.BUTTON,
             visible: true,
         });
